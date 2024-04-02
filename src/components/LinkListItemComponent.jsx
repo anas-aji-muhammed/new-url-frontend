@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { IoAnalytics } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -6,6 +6,10 @@ import { MdOutlineContentCopy, MdEdit } from "react-icons/md";
 import { SlOptions } from "react-icons/sl";
 
 function LinkListItemComponent() {
+  const [isOptionOpen, setIsOptionOpen] = useState(false);
+
+  const toggleDropdown = () => setIsOptionOpen(!isOptionOpen);
+
   return (
     <div className="w-full flex flex-row bg-white p-8 justify-between mb-3">
       <div className="flex flex-row overflow-hidden transition-width duration-300 ease">
@@ -23,7 +27,7 @@ function LinkListItemComponent() {
           <div className="flex pt-4 space-x-4">
             <div className="flex items-center space-x-2">
               <IoAnalytics />
-              <p>Impressions</p>
+              <p>100 Impressions</p>
             </div>
             <div className="flex items-center space-x-2">
               <FaRegCalendarAlt />
@@ -43,10 +47,21 @@ function LinkListItemComponent() {
           <MdEdit />
           {/* <span>Edit</span> */}
         </button>
-        <button className="flex items-center space-x-2 border border-gray-300 p-2 rounded">
+       <div  className="relative inline-block text-left">
+       <button className="flex items-center space-x-2 border border-gray-300 p-2 rounded" onClick={toggleDropdown} >
           <SlOptions />
           {/* <span>Options</span> */}
         </button>
+        {isOptionOpen && (
+        <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+          <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+            {/* <a href="#">Details</a> */}
+            <Link to={'/links/linkkkk/details'}  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"> Details</Link>
+
+          </div>
+        </div>
+      )}
+       </div>
       </div>
     </div>
   );
