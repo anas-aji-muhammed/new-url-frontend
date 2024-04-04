@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const config = {
-    baseURL: 'https://strong-saved-adder.ngrok-free.app/api/',
+    // baseURL: 'https://strong-saved-adder.ngrok-free.app/api/',
+    baseURL: 'https://new-url-11b64c63514e.herokuapp.com/api/',
     // Add other global configs here
 };
 
