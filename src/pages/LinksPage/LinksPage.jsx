@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LinkListItemComponent from "../../components/LinkListItemComponent";
 import { Link, Outlet } from "react-router-dom";
+import { fetchAllLinks } from "../../services/apiService";
 
 function LinksPage() {
+  const [allLinks, setAAllLinks] = useState([]);
+
+  useEffect(() => {
+    const getItems = async () => {
+      try {
+        const itemsData = await fetchAllLinks();
+        setAAllLinks(itemsData.urlData);
+      } catch (error) {
+        // Handle the error
+      }
+    };
+
+    getItems();
+  }, []);
   return (
     <div className="flex flex-col items-start justify-start w-full">
       <div className="flex flex-row justify-between w-full mb-2">
@@ -14,8 +29,12 @@ function LinksPage() {
           Create
         </Link>
       </div>
-
-      <LinkListItemComponent />
+        {
+          allLinks.map(
+            link => (<LinkListItemComponent key={link.id}  data={link} isDetailsPage={false}/>)
+          )
+        }
+      
     </div>
   );
 }

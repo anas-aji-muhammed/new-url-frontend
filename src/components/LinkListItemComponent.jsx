@@ -4,11 +4,20 @@ import { Link } from "react-router-dom";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { MdOutlineContentCopy, MdEdit } from "react-icons/md";
 import { SlOptions } from "react-icons/sl";
+import PropTypes from 'prop-types';
 
-function LinkListItemComponent() {
+function LinkListItemComponent({data, isDetailsPage, baseUrl}) {
   const [isOptionOpen, setIsOptionOpen] = useState(false);
 
   const toggleDropdown = () => setIsOptionOpen(!isOptionOpen);
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short', // abbreviated month name (e.g., Sep)
+      day: '2-digit', // two-digit day
+      year: '2-digit' // two-digit year
+    }).format(date);
+  }
 
   return (
     <div className="w-full flex flex-row bg-white p-8 justify-between mb-3">
@@ -20,18 +29,18 @@ function LinkListItemComponent() {
         />
         <div className="flex flex-col pl-4 gap-2">
           <h1 className="text-lg font-bold">Anas Aji Muhammed</h1>
-          <p className="text-base font-medium">https://bit.ly/3RkhxEj</p>
-          <p className="text-base font-medium">
-            https://portfolio-omega-seven-38.vercel.app/
-          </p>
+          <a className="text-base font-medium" href={`${baseUrl}${data.urlHash}`} target="_blank" rel="noopener noreferrer">{`${baseUrl}${data.urlHash}`}</a>
+          <a className="text-base font-medium" href={`${data.originalURL}`} target="_blank" rel="noopener noreferrer">
+          {data.originalURL}
+          </a>
           <div className="flex pt-4 space-x-4">
             <div className="flex items-center space-x-2">
               <IoAnalytics />
-              <p>100 Impressions</p>
+              <p>{data.count} Impressions</p>
             </div>
             <div className="flex items-center space-x-2">
               <FaRegCalendarAlt />
-              <p>Sep 15, 2023</p>
+              <p>{formatDate(data.createdDateTime)}</p>
             </div>
           </div>
         </div>
@@ -47,24 +56,41 @@ function LinkListItemComponent() {
           <MdEdit />
           {/* <span>Edit</span> */}
         </button>
-       <div  className="relative inline-block text-left">
-       <button className="flex items-center space-x-2 border border-gray-300 p-2 rounded" onClick={toggleDropdown} >
-          <SlOptions />
-          {/* <span>Options</span> */}
-        </button>
-        {isOptionOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-          <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-            {/* <a href="#">Details</a> */}
-            <Link to={'/links/linkkkk/details'}  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"> Details</Link>
-
+        {
+          !isDetailsPage &&
+          <div  className="relative inline-block text-left">
+          <button className="flex items-center space-x-2 border border-gray-300 p-2 rounded" onClick={toggleDropdown} >
+             <SlOptions />
+             {/* <span>Options</span> */}
+           </button>
+           {isOptionOpen && (
+           <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+               {/* <a href="#">Details</a> */}
+               <Link to={`/links/${data.urlHash}`}  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"> Details</Link>
+   
+             </div>
+           </div>
+         )}
           </div>
-        </div>
-      )}
-       </div>
+        }
+       
       </div>
     </div>
   );
 }
+LinkListItemComponent.propTypes = {
+  data: PropTypes.shape({
+    urlHash: PropTypes.string,
+    originalURL: PropTypes.string,
+    count: PropTypes.number,
+    id: PropTypes.number,
+    createdDateTime: PropTypes.any,
+  }),
+  isDetailsPage: PropTypes.bool,
+  baseUrl: PropTypes.string,
+
+
+};
 
 export default LinkListItemComponent;

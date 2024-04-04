@@ -28,7 +28,7 @@ const router = createBrowserRouter([
             element: <LinkCreationForm />,
           },
           {
-            path: ":linkId/details",
+            path: ":linkId/",
             element: <LinkDetailsPage />,
           },
         ],
